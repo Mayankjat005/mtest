@@ -3,13 +3,14 @@
 # Platform: Render, Koyeb, Railway, any Docker host
 # ======================================================
 
-# Playwright base image — Chromium pre-installed, no extra downloads needed
+# Playwright base image has all OS dependencies (libgbm, etc.) pre-installed
 FROM mcr.microsoft.com/playwright:v1.44.0-jammy
 
 WORKDIR /app
 
-# Skip browser download (already in base image)
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+# We REMOVED PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 so that npm install
+# automatically downloads the exact Chromium version that matches the npm playwright version.
+# This prevents "executable doesn't exist" errors due to minor version mismatches.
 ENV NODE_ENV=production
 ENV PORT=3000
 
