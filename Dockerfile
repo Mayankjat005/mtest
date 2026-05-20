@@ -8,15 +8,15 @@ FROM mcr.microsoft.com/playwright:v1.44.0-jammy
 
 WORKDIR /app
 
-# We REMOVED PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 so that npm install
-# automatically downloads the exact Chromium version that matches the npm playwright version.
-# This prevents "executable doesn't exist" errors due to minor version mismatches.
 ENV NODE_ENV=production
 ENV PORT=3000
 
 # Copy & install deps
 COPY package*.json ./
 RUN npm install --omit=dev
+
+# Force playwright to download the matching browser version explicitly during docker build
+RUN npx playwright install chromium
 
 # Copy app code
 COPY server.js ./
